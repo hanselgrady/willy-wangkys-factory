@@ -1,25 +1,88 @@
 import logo from './logo.svg';
 import './App.css';
+import React, { useCallback, useContext, useEffect, useState } from "react";
+import {
+    BrowserRouter as Router,
+    Switch,
+    Link,
+    Route
+} from 'react-router-dom';
 
+var fetch = require('node-fetch');
+var cors = require('cors');
+var soap = require('easy-soap-request');
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/about">About</Link>
+            </li>
+            <li>
+              <Link to="/supplierlist">Show Suppliers Price</Link>
+            </li>
+          </ul>
+        </nav>
+
+        {/* A <Switch> looks through its children <Route>s and
+            renders the first one that matches the current URL. */}
+        <Switch>
+          <Route path="/about">
+            <About />
+          </Route>
+          <Route path="/supplierlist">
+            <SupplierList />
+          </Route>
+          <Route path="/">
+            <Home />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   );
+}
+
+function Home() {
+  return <h2>Home</h2>;
+}
+
+function About() {
+  return <h2>About</h2>;
+}
+
+function SupplierList() {
+  const [sList, setSList] = useState([]);
+    fetch('http://localhost:7000/list')
+    .then(res => res.json())
+    .then(res => setSList(res));
+
+  return (
+      <div>
+          <h2>SupplierList</h2>
+          <table>
+            <thead>
+            <tr>
+              <th>Ingredients</th>
+              <th>Price</th>
+            </tr>
+            </thead>
+            <tbody>
+          {sList.map((item, i) => {return(
+            <tr>
+              <td>{ item.namabahan }</td>
+              <td>{ item.harga }</td>
+            </tr>
+          );})}
+            </tbody>
+          </table>
+      </div>
+  );
+
 }
 
 export default App;
