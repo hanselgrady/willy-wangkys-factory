@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import React, { useCallback, useContext, useEffect, useState } from "react";
+import axios from "axios";
 import {
     BrowserRouter as Router,
     Switch,
@@ -14,6 +15,7 @@ var soap = require('easy-soap-request');
 function App() {
   return (
     <Router>
+      <p>{getSaldo()}</p>
       <div>
         <nav>
           <ul>
@@ -26,6 +28,9 @@ function App() {
             <li>
               <Link to="/supplierlist">Show Suppliers Price</Link>
             </li>
+            <li>
+              <Link to="/getsaldo">Show Factory Balance</Link>
+            </li>
           </ul>
         </nav>
 
@@ -37,6 +42,9 @@ function App() {
           </Route>
           <Route path="/supplierlist">
             <SupplierList />
+          </Route>
+          <Route path="/getsaldo">
+            <GetSaldo />
           </Route>
           <Route path="/">
             <Home />
@@ -53,6 +61,46 @@ function Home() {
 
 function About() {
   return <h2>About</h2>;
+}
+
+function GetSaldo() {
+  const [val, setVal] = useState([]);
+  var url = "http://localhost:9999/ws/saldo";
+  var header = {
+    "Content-type": "text/xml; charset=utf-8",
+    "Access-Control-Allow-Origin": "http://localhost:9999/ws/saldo",
+    "Access-Control-Allow-Methods": "GET",
+  };
+  var xml = 
+    '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://services.factory.ws.jax/">' +
+      '<soapenv:Header/>' +
+      '<soapenv:Body>' +
+        '<ser:getSaldo/>' +
+      '</soapenv:Body>' +
+    '</soapenv:Envelope>';
+  // soap(url, header, xml).then(({response: {body, statusCode}}) => {
+  //   console.log(body);
+  //   console.log(statusCode);
+  // }).catch((errorBody) => {
+  //   console.error(errorBody);
+  // });
+  axios.request({
+    method: "get",
+    url: url,
+    crossDomain: true
+  }).then(res => {
+    console.log(res);
+    setVal(res)
+  }).catch(err => {
+    console.log(err);
+  })
+  
+  return (
+    <div>
+      <h2>Saldo Pabrik</h2><br></br>
+      <p>{val}</p>
+    </div>
+  );
 }
 
 function SupplierList() {
