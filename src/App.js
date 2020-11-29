@@ -8,6 +8,10 @@ import {
     Link,
     Route
 } from 'react-router-dom';
+const {JSDOM} = require('jsdom');
+const { window } = new JSDOM ('');
+const $ = require('jquery')(window);
+
 
 var fetch = require('node-fetch');
 var cors = require('cors');
