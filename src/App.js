@@ -1,4 +1,5 @@
 import logo from './logo.svg';
+import Login from "./login.js";
 import './App.css';
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import {
@@ -26,6 +27,9 @@ function App() {
             <li>
               <Link to="/supplierlist">Show Suppliers Price</Link>
             </li>
+            <li>
+              <Link to="/login">Login</Link>
+            </li>
           </ul>
         </nav>
 
@@ -38,9 +42,13 @@ function App() {
           <Route path="/supplierlist">
             <SupplierList />
           </Route>
+          <Route path="/login">
+            <Login />
+          </Route>
           <Route path="/">
             <Home />
           </Route>
+          
         </Switch>
       </div>
     </Router>
