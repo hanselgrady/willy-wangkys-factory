@@ -4,12 +4,13 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import $ from 'jquery';
+import { CookiesProvider } from "react-cookie";
 process.versions.node = '14.13.0';
 
 ReactDOM.render(
-  <React.StrictMode>
+  <CookiesProvider>
     <App />
-  </React.StrictMode>,
+  </CookiesProvider>,
   document.getElementById('root')
 );
 

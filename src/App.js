@@ -1,5 +1,7 @@
 import logo from './logo.svg';
 import Login from "./login.js";
+import Logout from "./logout.js";
+import Buy from "./buy.js";
 import './App.css';
 import React, { useParams, useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
@@ -9,6 +11,9 @@ import {
     Link,
     Route
 } from 'react-router-dom';
+import { useCookies } from "react-cookie";
+import {Redirect} from 'react-router-dom';
+
 const {JSDOM} = require('jsdom');
 const { window } = new JSDOM ('');
 const $ = require('jquery')(window);
@@ -20,45 +25,66 @@ var soap = require('easy-soap-request');
 var tsoap = require('tinysoap');
 
 function App() {
+  const [userCookie, setUserCookie, removeUserCookie] = useCookies(['username']);
+  console.log(userCookie['username']);
   return (
     <Router>
       <div>
         <nav>
+      {(userCookie['username']) ?
+        (
           <ul>
             <li>
               <Link to="/">Home</Link>
             </li>
             <li>
-              <Link to="/about">About</Link>
-            </li>
-            <li>
               <Link to="/supplierlist">Show Suppliers Price</Link>
             </li>
             <li>
-              <Link to="/login">Login</Link>
               <Link to="/getsaldo">Show Factory Balance</Link>
             </li>
+            <li>
+              <Link to="/buy">Buy Ingredients</Link>
+            </li>
+            <li>
+              <Link to="/logout">Logout</Link>
+            </li>
           </ul>
+        ): (
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/login">Login</Link>
+            </li>
+          </ul>
+
+        )
+      }
         </nav>
 
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
-          <Route path="/about">
-            <About />
-          </Route>
           <Route path="/supplierlist">
             <SupplierList />
           </Route>
           <Route path="/login">
             <Login />
+          </Route>
+          <Route path="/logout">
+            <Logout />
+          </Route>
           <Route path="/getsaldo">
             <GetSaldo />
+          </Route>
+          <Route path="/buy">
+            <Buy />
           </Route>
           <Route path="/">
             <Home />
           </Route>
-          
         </Switch>
       </div>
     </Router>
@@ -66,6 +92,10 @@ function App() {
 }
 
 function Home() {
+  const [userCookie, setUserCookie, removeUserCookie] = useCookies(['username']);
+  if (!userCookie['username']) {
+    return <Redirect to='/login' />;
+  }
   return <h2>Home</h2>;
 }
 
@@ -110,6 +140,7 @@ function RequestList() {
   });
 }
 function GetSaldo() {
+  const [userCookie, setUserCookie, removeUserCookie] = useCookies(['username']);
   const [val, setVal] = useState([]);
   var url = "http://localhost:9999/ws/saldo";
   var header = {
@@ -141,6 +172,10 @@ function GetSaldo() {
     console.log(err);
   })
   
+    if (!userCookie['username']) {
+    return <Redirect to='/login' />;
+  }
+  
   return (
     <div>
       <h2>Saldo Pabrik</h2><br></br>
@@ -150,6 +185,7 @@ function GetSaldo() {
 }
 
 function SupplierList() {
+  const [userCookie, setUserCookie, removeUserCookie] = useCookies(['username']);
   const [sList, setSList] = useState([]);
 
   useEffect(() => {
@@ -163,6 +199,10 @@ function SupplierList() {
       });
       return () => mounted = false;
   }, []);
+  
+  if (!userCookie['username']) {
+    return <Redirect to='/login' />;
+  }
   
   return (
       <div>
