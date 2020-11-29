@@ -1,4 +1,5 @@
 import logo from './logo.svg';
+import Login from "./login.js";
 import './App.css';
 import React, { useParams, useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
@@ -34,6 +35,7 @@ function App() {
               <Link to="/supplierlist">Show Suppliers Price</Link>
             </li>
             <li>
+              <Link to="/login">Login</Link>
               <Link to="/getsaldo">Show Factory Balance</Link>
             </li>
           </ul>
@@ -48,12 +50,15 @@ function App() {
           <Route path="/supplierlist">
             <SupplierList />
           </Route>
+          <Route path="/login">
+            <Login />
           <Route path="/getsaldo">
             <GetSaldo />
           </Route>
           <Route path="/">
             <Home />
           </Route>
+          
         </Switch>
       </div>
     </Router>
