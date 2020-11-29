@@ -26,9 +26,6 @@ function App() {
             <li>
               <Link to="/supplierlist">Show Suppliers Price</Link>
             </li>
-            <li>
-              <Link to="/requestlist">Show Request from Willy Wangky's Web Application</Link>
-            </li>
           </ul>
         </nav>
 
@@ -40,9 +37,6 @@ function App() {
           </Route>
           <Route path="/supplierlist">
             <SupplierList />
-          </Route>
-          <Route path="/requestlist">
-            <RequestList />
           </Route>
           <Route path="/">
             <Home />
@@ -61,35 +55,6 @@ function About() {
   return <h2>About</h2>;
 }
 
-function RequestList() {
-  const [sList, setSList] = useState([]);
-  fetch('http://localhost:9999/ws/request')
-  .then(res => res.json())
-  .then(res => setSList(res));
-  return (
-    <div>
-        <h2>RequestList</h2>
-        <table>
-          <thead>
-          <tr>
-            <th>Choco ID</th>
-            <th>Amount</th>
-            <th>Status</th>
-          </tr>
-          </thead>
-          <tbody>
-        {sList.map((item, i) => {return(
-          <tr>
-            <td>{ item.chocoid }</td>
-            <td>{ item.amount }</td>
-            <td>{ item.status }</td>
-          </tr>
-        );})}
-          </tbody>
-        </table>
-    </div>
-  );
-}
 function SupplierList() {
   const [sList, setSList] = useState([]);
     fetch('http://localhost:7000/list')
