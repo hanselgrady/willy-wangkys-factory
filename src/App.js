@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import React, { useParams, useCallback, useContext, useEffect, useState } from "react";
+import axios from "axios";
 import {
     BrowserRouter as Router,
     Switch,
@@ -29,7 +30,7 @@ function App() {
               <Link to="/supplierlist">Show Suppliers Price</Link>
             </li>
             <li>
-              <Link to="/requestlist">Show Request from Willy Wangky's Web Application</Link>
+              <Link to="/getsaldo">Show Factory Balance</Link>
             </li>
           </ul>
         </nav>
@@ -43,8 +44,8 @@ function App() {
           <Route path="/supplierlist">
             <SupplierList />
           </Route>
-          <Route path="/requestlist">
-            <RequestList />
+          <Route path="/getsaldo">
+            <GetSaldo />
           </Route>
           <Route path="/">
             <Home />
@@ -98,28 +99,43 @@ function RequestList() {
           console.log(result);
       });
   });
-
+}
+function GetSaldo() {
+  const [val, setVal] = useState([]);
+  var url = "http://localhost:9999/ws/saldo";
+  var header = {
+    "Content-type": "text/xml; charset=utf-8",
+    "Access-Control-Allow-Origin": "http://localhost:9999/ws/saldo",
+    "Access-Control-Allow-Methods": "GET",
+  };
+  var xml = 
+    '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://services.factory.ws.jax/">' +
+      '<soapenv:Header/>' +
+      '<soapenv:Body>' +
+        '<ser:getSaldo/>' +
+      '</soapenv:Body>' +
+    '</soapenv:Envelope>';
+  // soap(url, header, xml).then(({response: {body, statusCode}}) => {
+  //   console.log(body);
+  //   console.log(statusCode);
+  // }).catch((errorBody) => {
+  //   console.error(errorBody);
+  // });
+  axios.request({
+    method: "get",
+    url: url,
+    crossDomain: true
+  }).then(res => {
+    console.log(res.data);
+    setVal(res)
+  }).catch(err => {
+    console.log(err);
+  })
+  
   return (
     <div>
-        <h2>RequestList</h2>
-        <table>
-          <thead>
-          <tr>
-            <th>Choco ID</th>
-            <th>Amount</th>
-            <th>Status</th>
-          </tr>
-          </thead>
-          <tbody>
-        {sList.map((item, i) => {return(
-          <tr>
-            <td>{ item.chocoid }</td>
-            <td>{ item.amount }</td>
-            <td>{ item.status }</td>
-          </tr>
-        );})}
-          </tbody>
-        </table>
+      <h2>Saldo Pabrik</h2><br></br>
+      <p>{val}</p>
     </div>
   );
 }
