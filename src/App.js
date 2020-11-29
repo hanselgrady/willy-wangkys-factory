@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useParams, useCallback, useContext, useEffect, useState } from "react";
 import {
     BrowserRouter as Router,
     Switch,
@@ -32,15 +32,9 @@ function App() {
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
-          <Route path="/about">
-            <About />
-          </Route>
-          <Route path="/supplierlist">
-            <SupplierList />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
+          <Route path="/about" component = {About} />
+          <Route path="/supplierlist" component = {SupplierList} />
+          <Route path="/" component = {Home} />
         </Switch>
       </div>
     </Router>
@@ -57,10 +51,19 @@ function About() {
 
 function SupplierList() {
   const [sList, setSList] = useState([]);
-    fetch('http://localhost:7000/list')
-    .then(res => res.json())
-    .then(res => setSList(res));
 
+  useEffect(() => {
+    let mounted = true;
+    fetch('http://localhost:7000/list')
+      .then(res => res.json())
+      .then(res => {
+          if (mounted) {
+              setSList(res);
+          }
+      });
+      return () => mounted = false;
+  }, []);
+  
   return (
       <div>
           <h2>SupplierList</h2>
