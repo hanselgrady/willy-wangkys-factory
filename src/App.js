@@ -2,7 +2,9 @@ import logo from './logo.svg';
 import Login from "./login.js";
 import Logout from "./logout.js";
 import Buy from "./buy.js";
-import './App.css';
+import './common-fonts.css';
+import './common.css';
+import './common-navbar.css';
 import React, { useParams, useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import {
@@ -30,10 +32,10 @@ function App() {
   return (
     <Router>
       <div>
-        <nav>
+        <div className="header">
       {(userCookie['username']) ?
         (
-          <ul>
+          <ul className="navbar menu-left">
             <li>
               <Link to="/">Home</Link>
             </li>
@@ -51,7 +53,7 @@ function App() {
             </li>
           </ul>
         ): (
-          <ul>
+          <ul className="navbar menu-left">
             <li>
               <Link to="/">Home</Link>
             </li>
@@ -62,10 +64,11 @@ function App() {
 
         )
       }
-        </nav>
+        </div>
 
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
+        <div className="thread">
         <Switch>
           <Route path="/supplierlist">
             <SupplierList />
@@ -86,6 +89,7 @@ function App() {
             <Home />
           </Route>
         </Switch>
+        </div>
       </div>
     </Router>
   );
@@ -210,13 +214,15 @@ function SupplierList() {
           <table>
             <thead>
             <tr>
-              <th>Ingredients</th>
+              <th>ID</th>
+              <th>Ingredient</th>
               <th>Price</th>
             </tr>
             </thead>
             <tbody>
           {sList.map((item, i) => {return(
             <tr>
+              <td>{ item.idbahan }</td>
               <td>{ item.namabahan }</td>
               <td>{ item.harga }</td>
             </tr>

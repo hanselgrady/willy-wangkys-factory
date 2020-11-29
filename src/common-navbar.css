@@ -1,0 +1,52 @@
+ul.navbar {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    position: relative;
+}
+
+ul.navbar * {
+    box-sizing: content-box;
+}
+
+ul.navbar h1 {
+    margin: 5px 5px;
+    padding: 5px 10px
+}
+
+ul.navbar.menu-right li {
+    float: right;
+} 
+
+ul.navbar.menu-left li {
+    float: left;
+} 
+
+ul.navbar li a {
+    display: flex;
+    width: auto;
+    height:40px;
+    padding: 5px 20px;
+    position: relative;
+    text-decoration: none;
+    color: #dfdfdf;
+    font-family: 'KoHo', sans-serif;
+    transition: background-color 0.4s;
+    align-items: center;
+    justify-content: center;
+}
+
+
+ul.navbar li a:hover {
+    color: brown;
+    background-color: #f4f4f4;
+}
+
+#wwc-title {
+    padding: 5px 25px;
+    text-decoration: none;
+    font-family: 'Pacifico', sans-serif;
+    font-size: 1.25em;
+    font-style: bold;
+}
