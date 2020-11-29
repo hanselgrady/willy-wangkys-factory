@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import $ from 'jquery';
+process.versions.node = '14.13.0';
 
 ReactDOM.render(
   <React.StrictMode>

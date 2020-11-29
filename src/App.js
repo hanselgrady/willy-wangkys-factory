@@ -11,6 +11,8 @@ import {
 var fetch = require('node-fetch');
 var cors = require('cors');
 var soap = require('easy-soap-request');
+var tsoap = require('tinysoap');
+
 function App() {
   return (
     <Router>
@@ -26,15 +28,27 @@ function App() {
             <li>
               <Link to="/supplierlist">Show Suppliers Price</Link>
             </li>
+            <li>
+              <Link to="/requestlist">Show Request from Willy Wangky's Web Application</Link>
+            </li>
           </ul>
         </nav>
 
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
-          <Route path="/about" component = {About} />
-          <Route path="/supplierlist" component = {SupplierList} />
-          <Route path="/" component = {Home} />
+          <Route path="/about">
+            <About />
+          </Route>
+          <Route path="/supplierlist">
+            <SupplierList />
+          </Route>
+          <Route path="/requestlist">
+            <RequestList />
+          </Route>
+          <Route path="/">
+            <Home />
+          </Route>
         </Switch>
       </div>
     </Router>
@@ -47,6 +61,67 @@ function Home() {
 
 function About() {
   return <h2>About</h2>;
+}
+
+function RequestList() {
+  const [sList, setSList] = useState([]);
+    
+    // const url = 'http://localhost:9999/ws/saldo/';
+    // const sampleHeaders = {
+    //   'user-agent': 'sampleTest',
+    //   'Content-Type': 'text/xml;charset=UTF-8',
+    //   'soapAction': 'http://localhost:9999/ws/saldo?wsdl',
+    // };
+    // const xml = 
+    // '<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ndf="https://graphical.weather.gov/xml/DWMLgen/wsdl/ndfdXML.wsdl">' +
+   // '<soapenv:Header/>' +
+   // '<soapenv:Body>' +
+    //     '<m:getSaldo>' +
+            
+    //     '</m:getSaldo>' +
+   // '</soapenv:Body>' +
+// '</soapenv:Envelope>';
+    // // usage of module
+    // (async () => {
+    //   const { response } = await soap({ url: url, headers: sampleHeaders, xml: xml, timeout: 10000 }); // Optional timeout parameter(milliseconds)
+    //   const { headers, body, statusCode } = response;
+    //   console.log(headers);
+    //   console.log(body);
+    //   console.log(statusCode);
+    // }
+    //)();
+    //
+  var url = 'http://localhost:9999/ws/saldo?wsdl';
+  var args = {name: 'value'};
+  tsoap.createClient(url, function(err, client) {
+      client.MyFunction(args, function(err, result) {
+          console.log(result);
+      });
+  });
+
+  return (
+    <div>
+        <h2>RequestList</h2>
+        <table>
+          <thead>
+          <tr>
+            <th>Choco ID</th>
+            <th>Amount</th>
+            <th>Status</th>
+          </tr>
+          </thead>
+          <tbody>
+        {sList.map((item, i) => {return(
+          <tr>
+            <td>{ item.chocoid }</td>
+            <td>{ item.amount }</td>
+            <td>{ item.status }</td>
+          </tr>
+        );})}
+          </tbody>
+        </table>
+    </div>
+  );
 }
 
 function SupplierList() {
